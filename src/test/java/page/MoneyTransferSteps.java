@@ -14,6 +14,8 @@ public class MoneyTransferSteps {
     private final String firstCardId = "92df3f1c-a033-48e6-8390-206f6b1f56c0";
     private final String secondCardId = "0f3f5c2a-249e-4c3d-8287-09f7a039391d";
     private final String secondCardLastDigits = "0002";
+    private final String firstCardLastDigits = "0001";
+
 
     private int balanceFirstCardBefore;
     private int balanceSecondCardBefore;
@@ -33,7 +35,7 @@ public class MoneyTransferSteps {
 
     @Когда("пользователь переводит {int} рублей с карты с номером {string} на свою 1 карту с главной страницы")
     public void userTransfersMoney(int amount, String fromCardNumber) throws InterruptedException {
-        transferPage = dashboardPage.selectCardToTransferByLastDigits(secondCardLastDigits);
+        transferPage = dashboardPage.selectCardToTransferByLastDigits(firstCardLastDigits);
         dashboardPage = transferPage.transferFromCard(fromCardNumber, amount);
 
         int attempts = 0;
