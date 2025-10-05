@@ -47,4 +47,14 @@ public class DataHelper {
         String number;      // полный номер карты для ввода перевода
         String lastDigits;  // последние 4 цифры карты для выбора
     }
+
+    // Метод для получения информации о карте по индексу
+    public static CardInfo getCardInfo(int index) {
+        if (index == 0) {
+            return getFirstCardInfo();
+        } else if (index == 1) {
+            return getSecondCardInfo();
+        }
+        throw new IllegalArgumentException("Неверный индекс карты: " + index);
+    }
 }
