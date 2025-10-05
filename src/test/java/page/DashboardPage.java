@@ -1,10 +1,11 @@
 package page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.*;
 
 public class DashboardPage {
     private ElementsCollection cards = $$(".list__item div");
@@ -38,6 +39,28 @@ public class DashboardPage {
             if (card.text().contains(lastDigits)) {
                 card.$("[data-test-id='action-deposit']").click(); // Клик по кнопке "Пополнить"
                 return page(TransferPage.class);
+            }
+        }
+        throw new IllegalArgumentException("Карта с последними цифрами " + lastDigits + " не найдена");
+    }
+
+    public DashboardPage refresh() {
+        // Нажимаем кнопку Обновить
+        SelenideElement refreshButton = $$("span.button__text")
+                .findBy(Condition.text("Обновить"));
+        refreshButton.click();
+
+        // ждём, что дашбоард обновился
+        $("[data-test-id=dashboard]").shouldBe(visible);
+
+        return this;
+    }
+
+    // Получение баланса по последним цифрам карты
+    public int getCardBalanceByLastDigits(String lastDigits) {
+        for (SelenideElement card : cards) {
+            if (card.text().contains(lastDigits)) {
+                return extractBalance(card.text());
             }
         }
         throw new IllegalArgumentException("Карта с последними цифрами " + lastDigits + " не найдена");
